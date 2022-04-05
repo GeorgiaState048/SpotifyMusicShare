@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 # routes interpret different pages of a page
 # @bp.route("/")
 # def index():
-#     """initial html page"""
+#     """initial html page""
 #     return flask.render_template("newIndex.html")
 
 @bp.route("/")

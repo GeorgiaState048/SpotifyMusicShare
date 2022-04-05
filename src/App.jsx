@@ -4,7 +4,7 @@
 import './App.css';
 // import {
 //   useEffect, useState, React, useRef,
-// } from 'react';
+// } from 'react'
 import React from 'react';
 // import { FunFact } from './FunFact';
 
