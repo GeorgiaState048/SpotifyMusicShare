@@ -3,27 +3,26 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
-
+// test
 import './App.css';
 import {
   useEffect, React,
 } from 'react';
+import env from 'react-dotenv';
 import UserProfile from './components/UserProfile';
-
 // import { FunFact } from './FunFact';
 
-const CLIENT_ID = '00d15048d06349268d294078fdd59e1d'; // insert your client id here from spotify
+const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
-const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'http://10.250.34.208:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
   'user-read-playback-state',
 ];
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
-/*
-http://192.168.1.82:8000/#access_token=BQBE4IwOP9gMx5rMd2bPvfin7W5AV3u4P1RFSbyX85NuEZwVT_c7mM-7jAeKAXp2K5jN6s_IIhBa3a33QxM8Bb_9Mue1y3XPq1KuWj2VF2vVQaKF-TuF5NUuxjXqScQ29_iAT34rSb9bs3WVUTJuZTq9kF8X_ZUV&token_type=Bearer&expires_in=3600
-*/
+console.log(SPOTIFY_KEY);
+
 const getReturnedParamsFromSpotifyAuth = (hash) => {
   const stringAfterHashtag = hash.substring(1);
   const paramsInUrl = stringAfterHashtag.split('&');
@@ -50,7 +49,7 @@ function App() {
     }
   });
   function handleLogin() {
-    window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
+    window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${SPOTIFY_KEY}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   }
   return (
     <body>
