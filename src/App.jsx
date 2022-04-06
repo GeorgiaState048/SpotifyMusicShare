@@ -55,7 +55,8 @@ function App() {
   return (
     <body>
       <h1>Click Below to Login to your Spotify Account!</h1>
-      <button onClick={handleLogin}>login to spotify</button>
+      <button onClick={handleLogin}>log in to spotify</button>
+      <button onClick={handleLogin}>log in as a different user</button>
       <UserProfile />
     </body>
   );

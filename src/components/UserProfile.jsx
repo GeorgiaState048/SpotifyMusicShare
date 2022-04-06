@@ -28,7 +28,7 @@ const UserProfile = () => {
         },
       })
       .then((response) => {
-        setData(response.data);
+        setData(JSON.parse(JSON.stringify(response.data)));
         console.log(data);
       })
       .catch((error) => {
@@ -40,6 +40,7 @@ const UserProfile = () => {
     <body>
       <div>
         <button onClick={handleGetUserProfile}>Get User Info</button>
+        {data.display_name}
       </div>
     </body>
   );
