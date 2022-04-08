@@ -18,7 +18,7 @@ import { Playlists } from './Info';
 // import axios from 'axios';
 // import UserProfile from './components/UserProfile';
 
-const SPOTIFY_KEY =  env.CLIENT_ID; // insert your client id here from spotify
+const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
 const REDIRECT_URL_AFTER_LOGIN = 'http://10.32.193.217:8000/';
@@ -128,7 +128,7 @@ function App() {
         <div className="Profle">
           <img src={image} alt="Profile Pic" width="250" height="300" />
           {myPlaylists}
-        </div> 
+        </div>
       </body>
     </div>
   );
