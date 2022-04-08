@@ -18,10 +18,10 @@ import { Playlists } from './Info';
 // import axios from 'axios';
 // import UserProfile from './components/UserProfile';
 
-const SPOTIFY_KEY =  env.CLIENT_ID; // insert your client id here from spotify
+const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/home';
+const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -112,7 +112,7 @@ function App() {
     };
     getData();
   };
-
+  const link = '/home'; // link to go back to the previous page
   return (
     <div className="container">
       <body>
@@ -124,6 +124,7 @@ function App() {
         <button className="btn" onClick={handleLogin}>Switch Users</button>
         <button className="btn" onClick={handleGetUserProfile}>Get User Info</button>
         <button className="btn" onClick={handleGetUserPlaylists}>Get User Playlists</button>
+        <a href={link}>Go To The HomePage!</a>
         {name}
         <div className="Profle">
           <img src={image} alt="Profile Pic" width="250" height="300" />
