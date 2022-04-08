@@ -17,7 +17,7 @@ bp = flask.Blueprint(
 )
 
 # Point SQLAlchemy to your Heroku database
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://azoephjibwiywv:54d604ca4a497594155a8e310f6a20f5a26c1e4f505f0d3dbe9549391cb048a9@ec2-3-230-122-20.compute-1.amazonaws.com:5432/dfchj9751rqm59"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://azmmfcbrytbdrq:c9e4e8d269e5be0e557e5dc28d211b2577cfeff80f7eb9ff8cb39b30ab765e8e@ec2-3-230-122-20.compute-1.amazonaws.com:5432/d17jrs08h9l6jb"
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "this is a secret key!!!"
