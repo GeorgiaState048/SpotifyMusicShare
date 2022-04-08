@@ -21,7 +21,7 @@ import { Playlists } from './Info';
 const SPOTIFY_KEY =  env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://10.32.193.217:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -84,7 +84,7 @@ function App() {
   ));
 
   // when the get playlists button is clicked, it accesses the API endpoint
-  // i created in the get_playlists() in app.py and gets the playlist info 
+  // i created in the get_playlists() in app.py and gets the playlist info
   // from that function
   const handleGetUserPlaylists = () => {
     const getData = async () => {
@@ -98,7 +98,7 @@ function App() {
   };
 
   // when the get user info button is clicked, it accesses the API endpoint
-  // i created in the get_user_info() in app.py and gets the user info 
+  // i created in the get_user_info() in app.py and gets the user info
   // from that function
   const handleGetUserProfile = () => {
     const getData = async () => {
