@@ -17,7 +17,7 @@ bp = flask.Blueprint(
 )
 
 # Point SQLAlchemy to your Heroku database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://gofdtnsmakopgh:6c5c144efa240b2125c7445f87c30163197ac7d2d698328164a07c772291e52b@ec2-3-217-113-25.compute-1.amazonaws.com:5432/dblt1c2iu48ppu"
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "this is a secret key!!!"
@@ -62,6 +62,7 @@ def index():
     return flask.render_template("index.html")
 @bp.route("/home",methods=["POST", "GET"])
 def homepage():
+    """homepage"""
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -72,6 +73,7 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
+    """details of the groups"""
     group = next((group for group in groups if group["id"] == group_id),None)
     if group is None: 
         abort(404, description="No Group was Found with the given ID")
