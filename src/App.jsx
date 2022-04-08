@@ -21,7 +21,7 @@ import { Playlists } from './Info';
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'https://pure-crag-98841.herokuapp.com/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -129,7 +129,7 @@ function App() {
         <div className="Profle">
           <img src={image} alt="Profile Pic" width="250" height="300" />
           {myPlaylists}
-        </div> 
+        </div>
       </body>
     </div>
   );
