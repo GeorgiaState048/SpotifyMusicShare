@@ -17,7 +17,7 @@ bp = flask.Blueprint(
 )
 
 # Point SQLAlchemy to your Heroku database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://yuuztfsfbkddpu:0848488d314deaa3af90bd1d0eb638748702f81ed06ae28982527f1e53f3f8d0@ec2-3-230-122-20.compute-1.amazonaws.com:5432/d6h1nhbbs64l1i"
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "this is a secret key!!!"
@@ -31,23 +31,28 @@ groups = [
             {"id": 4, "name": "Justin Beiber's Anti-Fan Club", "date_created": "5 years", "description": "'nuff said."}, 
         ]
 #MODEL, will put in a seperate file later
-class group(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    date_created = db.Column(db.String)
-    description = db.Column(db.String)
-    posted_by =  db.Column(db.String, db.ForeignKey('user.id'))
+# class Group(db.Model):
+#     """class for groups"""
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String, unique=True)
+#     date_created = db.Column(db.String)
+#     description = db.Column(db.String)
+#     posted_by =  db.Column(db.String, db.ForeignKey('user.id'))
 
-
-class AllData(db.Model):
+class Person(db.Model):
     """class person"""
-
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=False, nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     image = db.Column(db.String(150), unique=False, nullable=False)
 
+class Playlists(db.Model):
+    """class for playlists"""
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True, nullable=False)
+    playlist = db.Column(db.String(150), unique=False, nullable=False)
 
-# db.create_all()
+
+db.create_all()
 
 # routes interpret different pages of a page
 # @bp.route("/")
@@ -62,6 +67,7 @@ def index():
     return flask.render_template("index.html")
 @bp.route("/home",methods=["POST", "GET"])
 def homepage():
+    """home page"""
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -72,6 +78,7 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
+    """group details"""
     group = next((group for group in groups if group["id"] == group_id),None)
     if group is None: 
         abort(404, description="No Group was Found with the given ID")
@@ -99,7 +106,13 @@ def get_user_info():
         )
     response_json = response.json()
     user = response_json["display_name"]
+    user_id[0] = response_json['id']
+    print(type(user_id[0]), " ", user_id[0])
     images = response_json["images"][0]["url"]
+    print(type(images), " ", images)
+    new_user = Person(username=user_id[0], image=images)
+    db.session.add(new_user)
+    db.session.commit()
     return flask.jsonify(
                 [
                     {"Username": user},
@@ -122,7 +135,10 @@ def get_playlists():
     playlist_names = []
     # adds all user playlist names to the returned json file. 
     for i in items:
-        playlist_names.append(i['name'])
+        playlist_names = i['name']
+        new_playlist = Playlists(username=user_id, playlist=playlist_names)
+        db.session.add(new_playlist)
+        db.session.commit()
     return flask.jsonify([
         {"PlaylistNames": playlist_names},
     ])
