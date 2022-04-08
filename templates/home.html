@@ -1,0 +1,39 @@
+<html>
+    <header>Home
+            <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+
+    </header>
+    <body>
+        <h1>This is the homepage after logging in</h1>
+        <h2>Available Group:</h2>
+        <table>
+            <tr>
+                <th>Cover Photo</th>
+                <th>Name</th>
+                <th>Created for</th>
+                <th>Description</th>
+            </tr>
+            {% for group in groups %}
+            <tr>
+                <td>
+                    <a href="{{url_for('bp.group_details', group_id = group['id'])}}">
+                        <img src="{{url_for('static', filename = group["id"]|string+".jpg")}}" height="100">
+                    </a>
+                </td>
+                <td>{{ group["name"] }}</td>
+                <td>{{ group["date_created"] }}</td>
+                <td>{{ group["description"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h2>Create new group</h2>
+        <form action="{{url_for('bp.homepage')}}" method="POST" style="padding:5px;">
+            <label for="Gname">Group Name:</label><br>
+            <input type="text" id="Gname" name="Gname"><br>
+            <label for="group_description">Group Description:</label><br>
+            <input type="text" id="group_description" name="group_description"><br><br>
+            <input type="submit" value="Create">
+            </form>
+            <br>
+    </body>
+</html>
