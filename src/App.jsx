@@ -15,7 +15,7 @@ import env from 'react-dotenv';
 import Logo from './images/logo.jpg';
 import { Playlists } from './Info';
 
-// import axios from 'axios'
+// import axios from 'axios'er
 // import UserProfile from './components/UserProfile';
 
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
