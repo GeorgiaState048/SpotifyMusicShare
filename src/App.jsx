@@ -84,7 +84,7 @@ function App() {
   ));
 
   // when the get playlists button is clicked, it accesses the API endpoint
-  // i created in the get_playlists() in app.py and gets the playlist info 
+  // i created in the get_playlists() in app.py and gets the playlist info
   // from that function
   const handleGetUserPlaylists = () => {
     const getData = async () => {
@@ -98,7 +98,7 @@ function App() {
   };
 
   // when the get user info button is clicked, it accesses the API endpoint
-  // i created in the get_user_info() in app.py and gets the user info 
+  // i created in the get_user_info() in app.py and gets the user info
   // from that function
   const handleGetUserProfile = () => {
     const getData = async () => {
@@ -112,7 +112,7 @@ function App() {
     };
     getData();
   };
-
+  const link = '/home'; // link to go back to the previous page
   return (
     <div className="container">
       <body>
@@ -124,6 +124,7 @@ function App() {
         <button className="btn" onClick={handleLogin}>Switch Users</button>
         <button className="btn" onClick={handleGetUserProfile}>Get User Info</button>
         <button className="btn" onClick={handleGetUserPlaylists}>Get User Playlists</button>
+        <a href={link}>Go To The HomePage!</a>
         {name}
         <div className="Profle">
           <img src={image} alt="Profile Pic" width="250" height="300" />

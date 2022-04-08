@@ -31,23 +31,28 @@ groups = [
             {"id": 4, "name": "Justin Beiber's Anti-Fan Club", "date_created": "5 years", "description": "'nuff said."}, 
         ]
 #MODEL, will put in a seperate file later
-class group(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    date_created = db.Column(db.String)
-    description = db.Column(db.String)
-    posted_by =  db.Column(db.String, db.ForeignKey('user.id'))
+# class Group(db.Model):
+#     """class for groups"""
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String, unique=True)
+#     date_created = db.Column(db.String)
+#     description = db.Column(db.String)
+#     posted_by =  db.Column(db.String, db.ForeignKey('user.id'))
 
-
-class AllData(db.Model):
+class Person(db.Model):
     """class person"""
-
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=False, nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     image = db.Column(db.String(150), unique=False, nullable=False)
 
+class Playlists(db.Model):
+    """class for playlists"""
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True, nullable=False)
+    playlist = db.Column(db.String(150), unique=False, nullable=False)
 
-# db.create_all()
+
+db.create_all()
 
 # routes interpret different pages of a page
 # @bp.route("/")
@@ -62,7 +67,11 @@ def index():
     return flask.render_template("index.html")
 @bp.route("/home",methods=["POST", "GET"])
 def homepage():
+<<<<<<< HEAD
     """homepage"""
+=======
+    """home page"""
+>>>>>>> a7a5202617e36f72cd2c3a7527a2dfff41afb920
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -73,7 +82,11 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
+<<<<<<< HEAD
     """details of the groups"""
+=======
+    """group details"""
+>>>>>>> a7a5202617e36f72cd2c3a7527a2dfff41afb920
     group = next((group for group in groups if group["id"] == group_id),None)
     if group is None: 
         abort(404, description="No Group was Found with the given ID")
@@ -101,7 +114,13 @@ def get_user_info():
         )
     response_json = response.json()
     user = response_json["display_name"]
+    user_id[0] = response_json['id']
+    print(type(user_id[0]), " ", user_id[0])
     images = response_json["images"][0]["url"]
+    print(type(images), " ", images)
+    new_user = Person(username=user_id[0], image=images)
+    db.session.add(new_user)
+    db.session.commit()
     return flask.jsonify(
                 [
                     {"Username": user},
@@ -124,7 +143,10 @@ def get_playlists():
     playlist_names = []
     # adds all user playlist names to the returned json file. 
     for i in items:
-        playlist_names.append(i['name'])
+        playlist_names = i['name']
+        new_playlist = Playlists(username=user_id, playlist=playlist_names)
+        db.session.add(new_playlist)
+        db.session.commit()
     return flask.jsonify([
         {"PlaylistNames": playlist_names},
     ])
