@@ -5,18 +5,20 @@
 /* eslint-disable camelcase */
 /* eslint-disable prefer-template */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-trailing-spaces */
 
-// test
 import './App.css';
 import {
   useEffect, useState, React,
 } from 'react';
 import env from 'react-dotenv';
+import Logo from './images/logo.jpg';
 import { Playlists } from './Info';
+
 // import axios from 'axios';
 // import UserProfile from './components/UserProfile';
 
-const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
+const SPOTIFY_KEY =  env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
 const REDIRECT_URL_AFTER_LOGIN = 'http://10.32.193.217:8000/';
@@ -112,16 +114,23 @@ function App() {
   };
 
   return (
-    <body>
-      <h1>Click Below to Login to your Spotify Account!</h1>
-      <button onClick={handleLogin}>log in to spotify</button>
-      <button onClick={handleLogin}>log in as a different user</button>
-      <button onClick={handleGetUserProfile}>Get User Info</button>
-      <button onClick={handleGetUserPlaylists}>Get User Playlists</button>
-      {name}
-      <img src={image} alt="Profile Pic" width="500" height="600" />
-      {myPlaylists}
-    </body>
+    <div className="container">
+      <body>
+        <h1>SPOTIFY MUSIC SHARE</h1>
+        <div className="topleft">
+          <img src={Logo} alt="Logo" width="140" height="125" />
+        </div>
+        <button className="btn" onClick={handleLogin}>log in to spotify</button>
+        <button className="btn" onClick={handleLogin}>Switch Users</button>
+        <button className="btn" onClick={handleGetUserProfile}>Get User Info</button>
+        <button className="btn" onClick={handleGetUserPlaylists}>Get User Playlists</button>
+        {name}
+        <div className="Profle">
+          <img src={image} alt="Profile Pic" width="250" height="300" />
+          {myPlaylists}
+        </div> 
+      </body>
+    </div>
   );
 }
 
