@@ -1,6 +1,5 @@
 Flask
 python-dotenv
-react-dotenv
 requests
 flask_login
 flask_sqlalchemy
