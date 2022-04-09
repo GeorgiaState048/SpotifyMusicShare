@@ -41,6 +41,11 @@ To start, clone this project from this public github
     pylint: disable=too-few-public-methods(models will have its own file)
     pylint: disable=unused-import (temporary)
     pylint: disable=invalid-name (temporary)
+    pylint: disable=undefined-variable(conflicted with unit testing)
+    pylint: disable=redefined-outer-name(conflcted with unit testing)
+    pylint: disable=unused-variable(conflicted with unit testing)
+    pylint: disable=no-name-in-module(module was required to unit test)
+    pylint: disable=import-error(false error on the module)
   
 
 # Creators
