@@ -67,11 +67,6 @@ def index():
     return flask.render_template("index.html")
 @bp.route("/home",methods=["POST", "GET"])
 def homepage():
-<<<<<<< HEAD
-    """homepage"""
-=======
-    """home page"""
->>>>>>> a7a5202617e36f72cd2c3a7527a2dfff41afb920
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -82,11 +77,6 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
-<<<<<<< HEAD
-    """details of the groups"""
-=======
-    """group details"""
->>>>>>> a7a5202617e36f72cd2c3a7527a2dfff41afb920
     group = next((group for group in groups if group["id"] == group_id),None)
     if group is None: 
         abort(404, description="No Group was Found with the given ID")
