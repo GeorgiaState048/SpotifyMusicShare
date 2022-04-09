@@ -38,7 +38,7 @@ To start, clone this project from this public github
     python3 app.py
 
 # Creators
-Jonathan Laurent
-Daniel Nguyen
-Kevin Huynh
+- Jonathan Laurent
+- Daniel Nguyen
+- Kevin Huynh
    
