@@ -1,7 +1,9 @@
+# pylint: disable=no-member
+# pylint: disable=too-few-public-methods
+"""import libaries and calling others"""
 import os
-import random
-import flask
 import json
+import flask
 import requests
 from flask_sqlalchemy import SQLAlchemy
 
@@ -94,6 +96,7 @@ def index():
 
 @bp.route("/home", methods=["POST", "GET"])
 def homepage():
+    """gets group page"""
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -110,9 +113,10 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
+    """gets group details"""
     group = next((group for group in groups if group["id"] == group_id), None)
     if group is None:
-        abort(404, description="No Group was Found with the given ID")
+        flask.abort(404, description="No Group was Found with the given ID")
     return flask.render_template("group.html", group=group)
 
 
@@ -182,5 +186,5 @@ def get_playlists():
 
 app.register_blueprint(bp)
 
-app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8000)))
+app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", "8000")))
 # app.run()
