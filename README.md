@@ -37,10 +37,10 @@ To start, clone this project from this public github
 ### after you ran these commands then you can run the app
     python3 app.py
 # Linting
-  pylint: disable=no-member(disable this to remove error for SQL)
-  pylint: disable=too-few-public-methods(models will have its own file)
-  pylint: disable=unused-import (temporary)
-  pylint: disable=invalid-name (temporary)
+    pylint: disable=no-member(disable this to remove error for SQL)
+    pylint: disable=too-few-public-methods(models will have its own file)
+    pylint: disable=unused-import (temporary)
+    pylint: disable=invalid-name (temporary)
   
 
 # Creators
