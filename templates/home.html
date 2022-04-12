@@ -1,12 +1,22 @@
 <html>
-    <header>Home
-            <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <header>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
 
     </header>
     <body>
-        <h1>This is the homepage after logging in</h1>
-        <a href='/'>Logout!</a>
-        <h2>Available Group:</h2>
+        <div class="header">
+            <div class="inner_header">
+                <div class="logo_container">
+                     <h1>Spotify Music Share</h1>
+                </div>
+            <nav>
+                <ul>
+                   <li> <a href='/' class='font'>Logout</a></li>
+                </ul>
+            </nav>
+            </div>
+        </div>
+        <h2>Available Groups:</h2>
         <table>
             <tr>
                 <th>Cover Photo</th>
@@ -29,11 +39,24 @@
         </table>
         <h2>Create new group</h2>
         <form action="{{url_for('bp.homepage')}}" method="POST" style="padding:5px;">
-            <label for="Gname">Group Name:</label><br>
-            <input type="text" id="Gname" name="Gname"><br>
-            <label for="group_description">Group Description:</label><br>
-            <input type="text" id="group_description" name="group_description"><br><br>
-            <input type="submit" value="Create">
+            <div class="popup" id="popup-1">
+                <div class="content">
+                <div class="close-btn" onclick ="togglePopup()">Something</div>
+            </div>
+            <div class="input-field">
+                <label for="Gname">Group Name:</label><br>
+                <input type="text" id="Gname" name="Gname"><br>
+                <label for="group_description">Group Description:</label><br>
+                <input type="text" id="group_description" name="group_description"><br><br>
+                <input type="submit" value="Create">
+            </div>
+            <button onclick="togglePopup()"claass="first-button">Create Group</button>
+            <script>
+                function togglePopup(){
+                  document.getElementById("popup-1")
+                  .classList.toggle("active")
+                }
+            </script>
             </form>
             <br>
     </body>
