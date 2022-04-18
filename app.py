@@ -84,8 +84,6 @@ class Playlists(db.Model):
     playlist = db.Column(db.String(150), unique=False, nullable=False)
     url = db.Column(db.String(150), unique=True, nullable=False)
 
-
-
 db.create_all()
 
 # routes interpret different pages of a page
