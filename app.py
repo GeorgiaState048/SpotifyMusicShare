@@ -1,7 +1,9 @@
+# pylint: disable=no-member
+# pylint: disable=too-few-public-methods
+"""import libaries and calling others"""
 import os
-import random
-import flask
 import json
+import flask
 import requests
 from flask_sqlalchemy import SQLAlchemy
 
@@ -22,12 +24,10 @@ bp = flask.Blueprint(
 )
 
 # Point SQLAlchemy to your Heroku database
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://ikycucawtdzvhv:b0cb879d7f7f858cde815c52bd175876eb87de197da2af2da8e62059a6e7f823@ec2-34-207-12-160.compute-1.amazonaws.com:5432/d6af6pmuc9gt36"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = "this is a secret key!!!"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 db = SQLAlchemy(app)
 # dummy API
@@ -57,25 +57,28 @@ groups = [
         "description": "'nuff said.",
     },
 ]
-# MODEL, will put in a seperate file later
-# class Group(db.Model):
-#     """class for groups"""
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String, unique=True)
-#     date_created = db.Column(db.String)
-#     description = db.Column(db.String)
-#     posted_by =  db.Column(db.String, db.ForeignKey('user.id'))
 
+class Group(db.Model):
+    """class for groups"""
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
+    date_created = db.Column(db.String)
+    description = db.Column(db.String)
+    posted_by = db.Column(db.String, db.ForeignKey("user.id"))
 
 class Person(db.Model):
     """class person"""
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     image = db.Column(db.String(1000), unique=False, nullable=False)
 
 
+
 class Playlists(db.Model):
     """class for playlists"""
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
     playlist = db.Column(db.String(150), unique=False, nullable=False)
@@ -100,7 +103,7 @@ def index():
 
 @bp.route("/home", methods=["POST", "GET"])
 def homepage():
-    """homepage"""
+    """gets group page"""
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
@@ -117,9 +120,11 @@ def homepage():
 
 @bp.route("/group/<int:group_id>")
 def group_details(group_id):
-    """group details"""
+    """gets group details"""
     group = next((group for group in groups if group["id"] == group_id), None)
-
+    if group is None:
+        flask.abort(404, description="No Group was Found with the given ID")
+    return flask.render_template("group.html", group=group)
 
 @bp.route("/get_access_token", methods=["GET", "POST"])
 def get_access_token():
@@ -196,5 +201,5 @@ def get_playlists():
 
 app.register_blueprint(bp)
 
-app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8000)))
+app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", "8000")))
 # app.run()

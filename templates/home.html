@@ -1,14 +1,29 @@
 <html>
-    <header>Home
-            <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <header>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
 
     </header>
     <body>
-        <h1>This is the homepage after logging in</h1>
-        <a href='/'>Logout!</a>
-        <h2>Available Group:</h2>
+        <div class="header">
+            <div class="inner_header">
+                <div class="logo_container">
+                     <h1>Spotify Music Share</h1>
+                </div>
+            <nav>
+                <ul>
+                   <li> <a href='/' class='font'>Logout</a></li>
+                </ul>
+            </nav>
+            </div>
+        </div>
+        <div id="title">
+            <div id="top">
+                <h2>Available Groups:</h2>
+            </div>
+        </div>
+
         <table>
-            <tr>
+            <tr id="header">
                 <th>Cover Photo</th>
                 <th>Name</th>
                 <th>Created for</th>
@@ -27,14 +42,16 @@
             </tr>
             {% endfor %}
         </table>
-        <h2>Create new group</h2>
+        <center>
         <form action="{{url_for('bp.homepage')}}" method="POST" style="padding:5px;">
-            <label for="Gname">Group Name:</label><br>
-            <input type="text" id="Gname" name="Gname"><br>
-            <label for="group_description">Group Description:</label><br>
-            <input type="text" id="group_description" name="group_description"><br><br>
-            <input type="submit" value="Create">
-            </form>
+            <div class="form_style">
+                <label for="Gname"class="form_label">Name/Description:</label><br>
+                <input type="text" id="Gname" name="Gname"class="form_field" placeholder="Name"><br>
+                <input type="text" id="group_description" name="group_description"class="form_field"><br><br>
+                <input type="submit" value="Create Group">
+            </div>
+              </form>
+            </center>
             <br>
     </body>
 </html>

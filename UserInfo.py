@@ -1,6 +1,10 @@
-import requests
+# pylint: disable=unused-import
+# pylint: disable=invalid-name
+"""Temporary module"""
 import os
-from dotenv import load_dotenv, find_dotenv
 import json
+import requests
+from dotenv import load_dotenv, find_dotenv
 import flask
+
 load_dotenv(find_dotenv())
