@@ -7,6 +7,12 @@ import flask
 import requests
 from flask_sqlalchemy import SQLAlchemy
 
+# things to do tomorrow
+# database structure
+#   what data should I tie to each user?
+# Group pages
+# update readMe
+# that's it lol
 access = []
 user_id = [" "]
 
@@ -52,7 +58,6 @@ groups = [
     },
 ]
 
-
 class Group(db.Model):
     """class for groups"""
 
@@ -62,21 +67,23 @@ class Group(db.Model):
     description = db.Column(db.String)
     posted_by = db.Column(db.String, db.ForeignKey("user.id"))
 
-
 class Person(db.Model):
     """class person"""
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
-    image = db.Column(db.String(150), unique=False, nullable=False)
+    image = db.Column(db.String(1000), unique=False, nullable=False)
+
 
 
 class Playlists(db.Model):
     """class for playlists"""
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=False, nullable=False)
     playlist = db.Column(db.String(150), unique=False, nullable=False)
+    url = db.Column(db.String(150), unique=True, nullable=False)
+
 
 
 db.create_all()
@@ -119,7 +126,6 @@ def group_details(group_id):
         flask.abort(404, description="No Group was Found with the given ID")
     return flask.render_template("group.html", group=group)
 
-
 @bp.route("/get_access_token", methods=["GET", "POST"])
 def get_access_token():
     """gets access token"""
@@ -138,25 +144,26 @@ def get_user_info():
     response = requests.get(
         user_endpoint,
         headers={
-            "Authorization": "Bearer " + access[1],
+            "Authorization": "Bearer " + access[-1],
         },
     )
     response_json = response.json()
     user = response_json["display_name"]
-    user_id[0] = response_json["id"]
-    print(type(user_id[0]), " ", user_id[0])
+    current_id = response_json["id"]
     images = response_json["images"][0]["url"]
-    print(type(images), " ", images)
-    new_user = Person(username=user_id[0], image=images)
-    db.session.add(new_user)
-    db.session.commit()
+    id_exists = Person.query.filter_by(username=current_id).all()
+    if len(id_exists) >= 1:
+        print("user already exists")
+    else:
+        new_user = Person(username=current_id, image=images)
+        db.session.add(new_user)
+        db.session.commit()
     return flask.jsonify(
         [
             {"Username": user},
             {"ProfilePic": images},
         ]
     )
-
 
 @bp.route("/get_playlists", methods=["GET", "POST"])
 def get_playlists():
@@ -165,18 +172,26 @@ def get_playlists():
     response = requests.get(
         user_endpoint,
         headers={
-            "Authorization": "Bearer " + access[1],
+            "Authorization": "Bearer " + access[-1],
         },
     )
     response_json = response.json()
     items = response_json["items"]
     playlist_names = []
-    # adds all user playlist names to the returned json file.
     for i in items:
-        playlist_names = i["name"]
-        new_playlist = Playlists(username=user_id, playlist=playlist_names)
-        db.session.add(new_playlist)
-        db.session.commit()
+        playlist_name = i["name"]
+        playlist_url = i["external_urls"]["spotify"]
+        playlist_id = i["owner"]["id"]
+        playlist_names.append((playlist_name, playlist_url))
+        playlist_exists = Playlists.query.filter_by(url=playlist_url).all()
+        if len(playlist_exists) >= 1:
+            print("playlist already exists")
+        else:
+            new_playlist = Playlists(
+                username=playlist_id, playlist=playlist_name, url=playlist_url
+            )
+            db.session.add(new_playlist)
+            db.session.commit()
     return flask.jsonify(
         [
             {"PlaylistNames": playlist_names},

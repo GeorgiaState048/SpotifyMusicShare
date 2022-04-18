@@ -21,7 +21,7 @@ import { Playlists } from './Info';
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'https://pure-crag-98841.herokuapp.com/';
+const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -60,6 +60,7 @@ function App() {
       localStorage.setItem('access_token', access_token);
       setToken(access_token);
       const newData = { token };
+      console.log(newData);
       fetch('/get_access_token', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
@@ -74,14 +75,12 @@ function App() {
 
   // the json file returns a list of playlist names
   function renderPlaylistNames(i) {
-    return <Playlists plNames={playlists[i]} />;
+    return (
+      <body> 
+        <a href={playlists[i][1]}>{playlists[i][0]}</a>
+      </body>
+    );
   }
-  // I use map function to print each playlist
-  const myPlaylists = playlists.map((currElement, index) => (
-    <p className="rowC">
-      {renderPlaylistNames(index)}
-    </p>
-  ));
 
   // when the get playlists button is clicked, it accesses the API endpoint
   // i created in the get_playlists() in app.py and gets the playlist info
@@ -112,6 +111,14 @@ function App() {
     };
     getData();
   };
+
+  // I use map function to print each playlist
+  const myPlaylists = playlists.map((currElement, index) => (
+    <p className="rowC">
+      {renderPlaylistNames(index)}
+    </p>
+  ));
+
   const link = '/home'; // link to go back to the previous page
   return (
     <div className="container">
