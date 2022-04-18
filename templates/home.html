@@ -16,9 +16,14 @@
             </nav>
             </div>
         </div>
-        <h2>Available Groups:</h2>
+        <div id="title">
+            <div id="top">
+                <h2>Available Groups:</h2>
+            </div>
+        </div>
+
         <table>
-            <tr>
+            <tr id="header">
                 <th>Cover Photo</th>
                 <th>Name</th>
                 <th>Created for</th>
@@ -37,27 +42,16 @@
             </tr>
             {% endfor %}
         </table>
-        <h2>Create new group</h2>
+        <center>
         <form action="{{url_for('bp.homepage')}}" method="POST" style="padding:5px;">
-            <div class="popup" id="popup-1">
-                <div class="content">
-                <div class="close-btn" onclick ="togglePopup()">Something</div>
+            <div class="form_style">
+                <label for="Gname"class="form_label">Name/Description:</label><br>
+                <input type="text" id="Gname" name="Gname"class="form_field" placeholder="Name"><br>
+                <input type="text" id="group_description" name="group_description"class="form_field"><br><br>
+                <input type="submit" value="Create Group">
             </div>
-            <div class="input-field">
-                <label for="Gname">Group Name:</label><br>
-                <input type="text" id="Gname" name="Gname"><br>
-                <label for="group_description">Group Description:</label><br>
-                <input type="text" id="group_description" name="group_description"><br><br>
-                <input type="submit" value="Create">
-            </div>
-            <button onclick="togglePopup()"claass="first-button">Create Group</button>
-            <script>
-                function togglePopup(){
-                  document.getElementById("popup-1")
-                  .classList.toggle("active")
-                }
-            </script>
-            </form>
+              </form>
+            </center>
             <br>
     </body>
 </html>
