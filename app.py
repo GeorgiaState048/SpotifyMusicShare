@@ -6,7 +6,10 @@ import json
 import flask
 import requests
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from dotenv import find_dotenv, load_dotenv
 
+load_dotenv(find_dotenv())
 # things to do tomorrow
 # database structure
 #   what data should I tie to each user?
@@ -58,35 +61,55 @@ groups = [
     },
 ]
 
+# class Group(db.Model):
+#     """class for groups"""
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String, unique=True)
+#     date_created = db.Column(db.String)
+#     description = db.Column(db.String)
+#     posted_by = db.Column(db.String, db.ForeignKey("user.id"))
+
 class Group(db.Model):
     """class for groups"""
-
     id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.String, unique=False)
     name = db.Column(db.String, unique=True)
-    date_created = db.Column(db.String)
-    description = db.Column(db.String)
-    posted_by = db.Column(db.String, db.ForeignKey("user.id"))
+    date_created = db.Column(db.String, unique=False)
+    description = db.Column(db.String, unique=False)
+    # posted_by = db.Column(db.String, db.ForeignKey("user.id"))
+
+class GroupPlaylists(db.Model):
+    """class for group playlists"""
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=False, nullable=False)
+    group_id = db.Column(db.String(120), unique=False, nullable=False)
+    playlist = db.Column(db.String(150), unique=False, nullable=False)
+    url = db.Column(db.String(150), unique=False, nullable=False)
 
 class Person(db.Model):
     """class person"""
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     image = db.Column(db.String(1000), unique=False, nullable=False)
 
-
-
 class Playlists(db.Model):
     """class for playlists"""
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
     playlist = db.Column(db.String(150), unique=False, nullable=False)
     url = db.Column(db.String(150), unique=True, nullable=False)
 
-
-
 db.create_all()
+
+# for i in groups:
+#     the_new_group = Group(
+#         group_id=i['id'],
+#         name=i['name'],
+#         date_created=['date_created'],
+#         description=['description']
+#         )
+#     db.session.add(the_new_group)
+#     db.session.commit()
 
 # routes interpret different pages of a page
 # @bp.route("/")
@@ -108,23 +131,67 @@ def homepage():
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
         new_id = len(groups) + 1
-        new_group = {
-            "id": new_id,
-            "name": group_name,
-            "date_created": "just now",
-            "description": description,
-        }
-        groups.append(new_group)
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        this_new_group = Group(group_id=new_id, name=group_name, date_created=dt_string, description=description)
+        db.session.add(this_new_group)
+        db.session.commit()
+    # all_groups = Group.query.filter_by().all()
     return flask.render_template("home.html", groups=groups)
 
-
-@bp.route("/group/<int:group_id>")
-def group_details(group_id):
-    """gets group details"""
+@bp.route("/delPlaylist/<int:group_id>", methods=["POST", "GET"])
+def del_playlist(group_id):
+    "deletes playlists"
+    if flask.request.method == "POST":
+        del_pl_name = flask.request.form["delete_playlist_name"]
+        del_pl_url = flask.request.form["delete_playlist_url"]
+        if del_pl_name and del_pl_url:
+            check_pl = GroupPlaylists.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
+            if len(check_pl) < 1:
+                print("this playlist does not exist")
+            else:
+                db.session.delete(check_pl[0])
+                db.session.commit()
+    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
+    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
     group = next((group for group in groups if group["id"] == group_id), None)
     if group is None:
         flask.abort(404, description="No Group was Found with the given ID")
-    return flask.render_template("group.html", group=group)
+    return flask.render_template(
+        "group.html",
+        group=group,
+        user_playlists=user_playlists,
+        group_playlists=group_playlists,
+        group_id=group_id,
+    )
+
+@bp.route("/group/<int:group_id>", methods=["GET", "POST"])
+def group_details(group_id):
+    """gets group details"""
+    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
+    if flask.request.method == "POST":
+        print("Im here")
+        add_pl_url = flask.request.form["add_playlist_url"]
+        add_pl_name = flask.request.form["add_playlist_name"]
+        if add_pl_url and add_pl_name:
+            pl_exists = GroupPlaylists.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
+            if len(pl_exists) >= 1:
+                print("this playlist already exists in this group")
+            else:
+                new_group_pl = GroupPlaylists(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
+                db.session.add(new_group_pl)
+                db.session.commit()
+    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
+    group = next((group for group in groups if group["id"] == group_id), None)
+    if group is None:
+        flask.abort(404, description="No Group was Found with the given ID")
+    return flask.render_template(
+        "group.html",
+        group=group,
+        user_playlists=user_playlists,
+        group_playlists=group_playlists,
+        group_id=group_id,
+    )
 
 @bp.route("/get_access_token", methods=["GET", "POST"])
 def get_access_token():
@@ -150,6 +217,7 @@ def get_user_info():
     response_json = response.json()
     user = response_json["display_name"]
     current_id = response_json["id"]
+    user_id[0] = current_id
     images = response_json["images"][0]["url"]
     id_exists = Person.query.filter_by(username=current_id).all()
     if len(id_exists) >= 1:
@@ -197,6 +265,7 @@ def get_playlists():
             {"PlaylistNames": playlist_names},
         ]
     )
+
 
 
 app.register_blueprint(bp)
