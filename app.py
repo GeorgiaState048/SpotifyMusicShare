@@ -139,6 +139,32 @@ def homepage():
     # all_groups = Group.query.filter_by().all()
     return flask.render_template("home.html", groups=groups)
 
+@bp.route("/delPlaylist/<int:group_id>", methods=["POST", "GET"])
+def del_playlist(group_id):
+    "deletes playlists"
+    if flask.request.method == "POST":
+        del_pl_name = flask.request.form["delete_playlist_name"]
+        del_pl_url = flask.request.form["delete_playlist_url"]
+        if del_pl_name and del_pl_url:
+            check_pl = GroupPlaylists.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
+            if len(check_pl) < 1:
+                print("this playlist does not exist")
+            else:
+                db.session.delete(check_pl[0])
+                db.session.commit()
+    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
+    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
+    group = next((group for group in groups if group["id"] == group_id), None)
+    if group is None:
+        flask.abort(404, description="No Group was Found with the given ID")
+    return flask.render_template(
+        "group.html",
+        group=group,
+        user_playlists=user_playlists,
+        group_playlists=group_playlists,
+        group_id=group_id,
+    )
+
 @bp.route("/group/<int:group_id>", methods=["GET", "POST"])
 def group_details(group_id):
     """gets group details"""
@@ -147,8 +173,6 @@ def group_details(group_id):
         print("Im here")
         add_pl_url = flask.request.form["add_playlist_url"]
         add_pl_name = flask.request.form["add_playlist_name"]
-        del_pl_name = flask.request.form["delete_playlist_name"]
-        del_pl_url = flask.request.form["delete_playlist_url"]
         if add_pl_url and add_pl_name:
             pl_exists = GroupPlaylists.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
             if len(pl_exists) >= 1:
@@ -156,15 +180,6 @@ def group_details(group_id):
             else:
                 new_group_pl = GroupPlaylists(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
                 db.session.add(new_group_pl)
-                db.session.commit()
-        if del_pl_name and del_pl_url:
-            # del_pl = GroupPlaylists(username=user_id[0], group_id=str(group_id), playlist=del_pl_name, url=del_pl_url)
-            check_pl = GroupPlaylists.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
-            print(check_pl)
-            if len(check_pl) < 1:
-                print("this playlist does not exist")
-            else:
-                db.session.delete(check_pl[0])
                 db.session.commit()
     group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
     group = next((group for group in groups if group["id"] == group_id), None)

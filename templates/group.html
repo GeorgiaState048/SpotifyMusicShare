@@ -25,6 +25,9 @@
                 <textarea rows="1" cols="50" name="add_playlist_url" placeholder="input playlist url to be added"></textarea>
                 <label for="add_playlist_name">Add Playlist Name: </label>
                 <textarea rows="1" cols="50" placeholder="input playlist name to be added" name="add_playlist_name"></textarea>
+                <input type="submit" value="Submit">
+            </form>
+            <form method="POST" action="/delPlaylist/{{group_id}}">
                 <label for="delete_playlist_url">Delete Playlist Url: </label>
                 <textarea rows="1" cols="50" name="delete_playlist_url" placeholder="input playlist url to be deleted"></textarea>
                 <label for="delete_playlist_name">Delete Playlist Name: </label>
