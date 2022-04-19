@@ -1,15 +1,15 @@
 <html>
     <header>
-        <title>{{group["name"]}}'s Group - Spotify Music Share</title>
+        <title>{{group.name}}'s Group - Spotify Music Share</title>
     </header>
     <body style="margin:2%">
         <div style="float:left; border-style:double;">
             <img src="{{url_for('static', filename = group["id"]|string+".jpg")}}" height="350">
         </div>
         <div style="float:left; margin:10px;">
-            <h1 class="title">Welcome to {{ group["name"] }}!</h1>
-            <p><b>Created for: &nbsp;</b> {{group["date_created"]}}</p>
-            <p><b>Description: &nbsp;</b> {{group["description"]}}</p>
+            <h1 class="title">Welcome to {{group.name}}!</h1>
+            <p><b>Created for: &nbsp;</b> {{group.date_created}}</p>
+            <p><b>Description: &nbsp;</b> {{group.description}}</p>
         </div>
         <div style="float:right; margin:10px;">
             <h1 class="title">Your Playlists</h1>
