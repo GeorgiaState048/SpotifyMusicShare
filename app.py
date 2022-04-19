@@ -61,14 +61,6 @@ groups = [
     },
 ]
 
-# class Group(db.Model):
-#     """class for groups"""
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String, unique=True)
-#     date_created = db.Column(db.String)
-#     description = db.Column(db.String)
-#     posted_by = db.Column(db.String, db.ForeignKey("user.id"))
-
 class Group(db.Model):
     """class for groups"""
     id = db.Column(db.Integer, primary_key=True)
@@ -101,28 +93,24 @@ class Playlists(db.Model):
 
 db.create_all()
 
-# for i in groups:
-#     the_new_group = Group(
-#         group_id=i['id'],
-#         name=i['name'],
-#         date_created=['date_created'],
-#         description=['description']
-#         )
-#     db.session.add(the_new_group)
-#     db.session.commit()
-
-# routes interpret different pages of a page
-# @bp.route("/")
-# def index():
-#     """initial html page""
-#     return flask.render_template("newIndex.html")
-
+for i in groups:
+    the_new_group = Group(
+        group_id=i['id'],
+        name=i['name'],
+        date_created=i['date_created'],
+        description=i['description']
+        )
+    check_groups=Group.query.filter_by().all()
+    if len(check_groups) >= 4:
+        print("group database already populated")
+    else:
+        db.session.add(the_new_group)
+        db.session.commit()
 
 @bp.route("/")
 def index():
     """initial react page"""
     return flask.render_template("index.html")
-
 
 @bp.route("/home", methods=["POST", "GET"])
 def homepage():
@@ -130,14 +118,15 @@ def homepage():
     if flask.request.method == "POST":
         group_name = flask.request.form["Gname"]
         description = flask.request.form["group_description"]
-        new_id = len(groups) + 1
+        group = Group.query.filter_by().all()
+        new_id = len(group) + 1
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         this_new_group = Group(group_id=new_id, name=group_name, date_created=dt_string, description=description)
         db.session.add(this_new_group)
         db.session.commit()
-    # all_groups = Group.query.filter_by().all()
-    return flask.render_template("home.html", groups=groups)
+    all_groups = Group.query.filter_by().all()
+    return flask.render_template("home.html", groups=all_groups)
 
 @bp.route("/delPlaylist/<int:group_id>", methods=["POST", "GET"])
 def del_playlist(group_id):
@@ -182,12 +171,13 @@ def group_details(group_id):
                 db.session.add(new_group_pl)
                 db.session.commit()
     group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
-    group = next((group for group in groups if group["id"] == group_id), None)
-    if group is None:
-        flask.abort(404, description="No Group was Found with the given ID")
+    # group = next((group for group in groups if group["id"] == group_id), None)
+    # if group is None:
+    #     flask.abort(404, description="No Group was Found with the given ID")
+    group = Group.query.filter_by(group_id=str(group_id)).all()
     return flask.render_template(
         "group.html",
-        group=group,
+        group=group[0],
         user_playlists=user_playlists,
         group_playlists=group_playlists,
         group_id=group_id,

@@ -32,13 +32,13 @@
             {% for group in groups %}
             <tr>
                 <td>
-                    <a href="{{url_for('bp.group_details', group_id = group['id'])}}">
+                    <a href="/group/{{group.group_id}}">
                         <img src="{{url_for('static', filename = group["id"]|string+".jpg")}}" height="100">
                     </a>
                 </td>
-                <td>{{ group["name"] }}</td>
-                <td>{{ group["date_created"] }}</td>
-                <td>{{ group["description"] }}</td>
+                <td>{{ group.name }}</td>
+                <td>{{ group.date_created }}</td>
+                <td>{{ group.description }}</td>
             </tr>
             {% endfor %}
         </table>
