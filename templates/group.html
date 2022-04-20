@@ -19,6 +19,18 @@
             {%endfor%}
         </div>
         <div>
+            <h1 class="title">Group Chat</h1>
+            <form method="POST" action="/post_comments/{{group_id}}">
+                <label for="comment">Leave a Comment: </label>
+                <textarea rows="5" cols="50" name="comment" placeholder="leave a comment"></textarea>
+                <input type="submit" value="Submit">
+            </form>
+            {% for i in (comments) %}
+                <h2><b>Name: {{i.username}}</b></h2> 
+                <p><b>Comment: {{i.comments}}</b></p>
+            {%endfor%}
+        </div>
+        <div>
             <h1 class="title">Group Playlists</h1>
             <form method="POST" action="/group/{{group_id}}">
                 <label for="add_playlist_url">Add Playlist Url: </label>
@@ -34,7 +46,7 @@
                 <textarea rows="1" cols="50" placeholder="input playlist name to be deleted" name="delete_playlist_name"></textarea>
                 <input type="submit" value="Submit">
             </form>
-            {% for i in (group_playlists) %}
+            {% for i in (playlist) %}
                 <h2><b>Name: {{i.playlist}}</b></h2> 
                 <p><b>Creator: {{i.username}}</b></p>
                 <p><b>Url: {{i.url}}</b></p>

@@ -68,15 +68,15 @@ class Group(db.Model):
     name = db.Column(db.String, unique=True)
     date_created = db.Column(db.String, unique=False)
     description = db.Column(db.String, unique=False)
-    # posted_by = db.Column(db.String, db.ForeignKey("user.id"))
 
-class GroupPlaylists(db.Model):
+class GroupInfo(db.Model):
     """class for group playlists"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
     group_id = db.Column(db.String(120), unique=False, nullable=False)
-    playlist = db.Column(db.String(150), unique=False, nullable=False)
-    url = db.Column(db.String(150), unique=False, nullable=False)
+    playlist = db.Column(db.String(150), unique=False, nullable=True)
+    url = db.Column(db.String(150), unique=False, nullable=True)
+    comments = db.Column(db.String, unique=False, nullable=True)
 
 class Person(db.Model):
     """class person"""
@@ -131,26 +131,59 @@ def homepage():
 @bp.route("/delPlaylist/<int:group_id>", methods=["POST", "GET"])
 def del_playlist(group_id):
     "deletes playlists"
+    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
     if flask.request.method == "POST":
         del_pl_name = flask.request.form["delete_playlist_name"]
         del_pl_url = flask.request.form["delete_playlist_url"]
         if del_pl_name and del_pl_url:
-            check_pl = GroupPlaylists.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
+            check_pl = GroupInfo.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
             if len(check_pl) < 1:
                 print("this playlist does not exist")
             else:
                 db.session.delete(check_pl[0])
                 db.session.commit()
-    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
-    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
-    group = next((group for group in groups if group["id"] == group_id), None)
-    if group is None:
-        flask.abort(404, description="No Group was Found with the given ID")
+    group_info = GroupInfo.query.filter_by(group_id=str(group_id)).all()
+    comments = []
+    playlists = []
+    for j in group_info:
+        if j.comments:
+            comments.append(j)
+        if j.url:
+            playlists.append(j)
+    group = Group.query.filter_by(group_id=str(group_id)).all()
     return flask.render_template(
         "group.html",
-        group=group,
+        group=group[0],
         user_playlists=user_playlists,
-        group_playlists=group_playlists,
+        comments=comments,
+        playlist=playlists,
+        group_id=group_id,
+    )
+
+@bp.route("/post_comments/<int:group_id>", methods=["POST", "GET"])
+def post_comment(group_id):
+    """Post a comment"""
+    user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
+    if flask.request.method == "POST":
+        comment = flask.request.form["comment"]
+        new_comment = GroupInfo(username=user_id[0], group_id=group_id, comments=comment)
+        db.session.add(new_comment)
+        db.session.commit()
+    group_info = GroupInfo.query.filter_by(group_id=str(group_id)).all()
+    comments = []
+    playlists = []
+    for j in group_info:
+        if j.comments:
+            comments.append(j)
+        if j.url:
+            playlists.append(j)
+    group = Group.query.filter_by(group_id=str(group_id)).all()
+    return flask.render_template(
+        "group.html",
+        group=group[0],
+        user_playlists=user_playlists,
+        comments=comments,
+        playlist=playlists,
         group_id=group_id,
     )
 
@@ -163,23 +196,28 @@ def group_details(group_id):
         add_pl_url = flask.request.form["add_playlist_url"]
         add_pl_name = flask.request.form["add_playlist_name"]
         if add_pl_url and add_pl_name:
-            pl_exists = GroupPlaylists.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
+            pl_exists = GroupInfo.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
             if len(pl_exists) >= 1:
                 print("this playlist already exists in this group")
             else:
-                new_group_pl = GroupPlaylists(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
+                new_group_pl = GroupInfo(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
                 db.session.add(new_group_pl)
                 db.session.commit()
-    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
-    # group = next((group for group in groups if group["id"] == group_id), None)
-    # if group is None:
-    #     flask.abort(404, description="No Group was Found with the given ID")
+    group_info = GroupInfo.query.filter_by(group_id=str(group_id)).all()
+    comments = []
+    playlists = []
+    for j in group_info:
+        if j.comments:
+            comments.append(j)
+        if j.url:
+            playlists.append(j)
     group = Group.query.filter_by(group_id=str(group_id)).all()
     return flask.render_template(
         "group.html",
         group=group[0],
         user_playlists=user_playlists,
-        group_playlists=group_playlists,
+        comments=comments,
+        playlist=playlists,
         group_id=group_id,
     )
 
@@ -192,7 +230,6 @@ def get_access_token():
         info = json.loads(flask.request.data)
         access.append(info["token"])
     return access[0]
-
 
 @bp.route("/user_info", methods=["GET", "POST"])
 def get_user_info():
