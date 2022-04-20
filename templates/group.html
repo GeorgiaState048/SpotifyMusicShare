@@ -21,6 +21,18 @@
             frameBorder="0" allowfullscreen=""
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         {%endfor%}
+        <div>
+            <h1 class="title">Group Chat</h1>
+            <form method="POST" action="/post_comments/{{group_id}}">
+                <label for="comment">Leave a Comment: </label>
+                <textarea rows="5" cols="50" name="comment" placeholder="leave a comment"></textarea>
+                <input type="submit" value="Submit">
+            </form>
+            {% for i in (comments) %}
+            <h2><b>Name: {{i.username}}</b></h2>
+            <p><b>Comment: {{i.comments}}</b></p>
+            {%endfor%}
+            </div>
     </div>
     <div>
         <h1 class="title">Group Playlists</h1>
@@ -52,6 +64,5 @@
         {%endfor%}
     </div>
 </body>
-
 </html>
 
