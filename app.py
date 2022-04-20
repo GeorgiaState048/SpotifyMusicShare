@@ -27,7 +27,7 @@ bp = flask.Blueprint(
 )
 
 # Point SQLAlchemy to your Heroku database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://ikycucawtdzvhv:b0cb879d7f7f858cde815c52bd175876eb87de197da2af2da8e62059a6e7f823@ec2-34-207-12-160.compute-1.amazonaws.com:5432/d6af6pmuc9gt36"
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -69,14 +69,16 @@ class Group(db.Model):
     date_created = db.Column(db.String, unique=False)
     description = db.Column(db.String, unique=False)
     # posted_by = db.Column(db.String, db.ForeignKey("user.id"))
-
-class GroupPlaylists(db.Model):
+class GroupInfo(db.Model):
     """class for group playlists"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
     group_id = db.Column(db.String(120), unique=False, nullable=False)
-    playlist = db.Column(db.String(150), unique=False, nullable=False)
-    url = db.Column(db.String(150), unique=False, nullable=False)
+    playlist = db.Column(db.String(150), unique=False, nullable=True)
+    url = db.Column(db.String(150), unique=False, nullable=True)
+    comments = db.Column(db.String, unique=False, nullable=True)
+
+
 
 class Person(db.Model):
     """class person"""
@@ -135,14 +137,14 @@ def del_playlist(group_id):
         del_pl_name = flask.request.form["delete_playlist_name"]
         del_pl_url = flask.request.form["delete_playlist_url"]
         if del_pl_name and del_pl_url:
-            check_pl = GroupPlaylists.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
+            check_pl = GroupInfo.query.filter_by(group_id=str(group_id), url=del_pl_url).all()
             if len(check_pl) < 1:
                 print("this playlist does not exist")
             else:
                 db.session.delete(check_pl[0])
                 db.session.commit()
     user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
-    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
+    group_playlists = GroupInfo.query.filter_by(group_id=str(group_id)).all()
     group = next((group for group in groups if group["id"] == group_id), None)
     if group is None:
         flask.abort(404, description="No Group was Found with the given ID")
@@ -163,14 +165,14 @@ def group_details(group_id):
         add_pl_url = flask.request.form["add_playlist_url"]
         add_pl_name = flask.request.form["add_playlist_name"]
         if add_pl_url and add_pl_name:
-            pl_exists = GroupPlaylists.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
+            pl_exists = GroupInfo.query.filter_by(group_id=str(group_id), url=add_pl_url).all()
             if len(pl_exists) >= 1:
                 print("this playlist already exists in this group")
             else:
-                new_group_pl = GroupPlaylists(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
+                new_group_pl = GroupInfo(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
                 db.session.add(new_group_pl)
                 db.session.commit()
-    group_playlists = GroupPlaylists.query.filter_by(group_id=str(group_id)).all()
+    group_playlists = GroupInfo.query.filter_by(group_id=str(group_id)).all()
     # group = next((group for group in groups if group["id"] == group_id), None)
     # if group is None:
     #     flask.abort(404, description="No Group was Found with the given ID")
@@ -246,7 +248,7 @@ def get_playlists():
             print("playlist already exists")
         else:
             new_playlist = Playlists(
-                username=playlist_id, playlist=playlist_name, url=playlist_url
+                username=playlist_id, playlist=playlist_name, url=playlist_url,
             )
             db.session.add(new_playlist)
             db.session.commit()

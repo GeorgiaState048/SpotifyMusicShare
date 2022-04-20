@@ -1,44 +1,57 @@
 <html>
-    <header>
-        <title>{{group.name}}'s Group - Spotify Music Share</title>
-    </header>
-    <body style="margin:2%">
-        <div style="float:left; border-style:double;">
-            <img src="{{url_for('static', filename = group["id"]|string+".jpg")}}" height="350">
-        </div>
-        <div style="float:left; margin:10px;">
-            <h1 class="title">Welcome to {{group.name}}!</h1>
-            <p><b>Created for: &nbsp;</b> {{group.date_created}}</p>
-            <p><b>Description: &nbsp;</b> {{group.description}}</p>
-        </div>
-        <div style="float:right; margin:10px;">
-            <h1 class="title">Your Playlists</h1>
-            {% for i in (user_playlists) %}
-                <h2><b>Name: {{i.playlist}}</b></h2> 
-                <b><a href="{{i.url}}">Link to {{i.playlist}}</a></b>
-            {%endfor%}
-        </div>
-        <div>
-            <h1 class="title">Group Playlists</h1>
-            <form method="POST" action="/group/{{group_id}}">
-                <label for="add_playlist_url">Add Playlist Url: </label>
-                <textarea rows="1" cols="50" name="add_playlist_url" placeholder="input playlist url to be added"></textarea>
-                <label for="add_playlist_name">Add Playlist Name: </label>
-                <textarea rows="1" cols="50" placeholder="input playlist name to be added" name="add_playlist_name"></textarea>
-                <input type="submit" value="Submit">
-            </form>
-            <form method="POST" action="/delPlaylist/{{group_id}}">
-                <label for="delete_playlist_url">Delete Playlist Url: </label>
-                <textarea rows="1" cols="50" name="delete_playlist_url" placeholder="input playlist url to be deleted"></textarea>
-                <label for="delete_playlist_name">Delete Playlist Name: </label>
-                <textarea rows="1" cols="50" placeholder="input playlist name to be deleted" name="delete_playlist_name"></textarea>
-                <input type="submit" value="Submit">
-            </form>
-            {% for i in (group_playlists) %}
-                <h2><b>Name: {{i.playlist}}</b></h2> 
-                <p><b>Creator: {{i.username}}</b></p>
-                <p><b>Url: {{i.url}}</b></p>
-            {%endfor%}
-        </div>
-    </body>
+<header>
+    <title>{{group.name}}'s Group - Spotify Music Share</title>
+</header>
+
+<body style="margin:2%">
+    <div style="float:left; border-style:double;">
+        <img src="{{url_for('static', filename = group[" id"]|string+".jpg")}}" height="350">
+    </div>
+    <div style="float:left; margin:10px;">
+        <h1 class="title">Welcome to {{group.name}}!</h1>
+        <p><b>Created for: &nbsp;</b> {{group.date_created}}</p>
+        <p><b>Description: &nbsp;</b> {{group.description}}</p>
+    </div>
+    <div style="float:right; margin:10px;">
+        <h1 class="title">Your Playlists</h1>
+        {% for i in (user_playlists) %}
+        <h2><b>Name: {{i.playlist}}</b></h2>
+        <iframe style="border-radius:12px"
+            src="https://open.spotify.com/embed/playlist/{{i.url[34:]}}?utm_source=generator" width="300" height="80"
+            frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        {%endfor%}
+    </div>
+    <div>
+        <h1 class="title">Group Playlists</h1>
+        <form method="POST" action="/group/{{group_id}}">
+            <label for="add_playlist_url">Add Playlist Url: </label>
+            <textarea rows="1" cols="50" name="add_playlist_url"
+                placeholder="input playlist url to be added"></textarea>
+            <label for="add_playlist_name">Add Playlist Name: </label>
+            <textarea rows="1" cols="50" placeholder="input playlist name to be added"
+                name="add_playlist_name"></textarea>
+            <input type="submit" value="Submit">
+        </form>
+        <form method="POST" action="/delPlaylist/{{group_id}}">
+            <label for="delete_playlist_url">Delete Playlist Url: </label>
+            <textarea rows="1" cols="50" name="delete_playlist_url"
+                placeholder="input playlist url to be deleted"></textarea>
+            <label for="delete_playlist_name">Delete Playlist Name: </label>
+            <textarea rows="1" cols="50" placeholder="input playlist name to be deleted"
+                name="delete_playlist_name"></textarea>
+            <input type="submit" value="Submit">
+        </form>
+        {% for i in (group_playlists) %}
+        <h2><b>Name: {{i.playlist}}</b></h2>
+        <p><b>Creator: {{i.username}}</b></p>
+        <iframe style="border-radius:12px"
+            src="https://open.spotify.com/embed/playlist/{{i.url[34:]}}?utm_source=generator" width="30%" height="200"
+            frameBorder="0" allowfullscreen="yes"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        {%endfor%}
+    </div>
+</body>
+
 </html>
+
