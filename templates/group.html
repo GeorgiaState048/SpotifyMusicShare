@@ -5,7 +5,7 @@
 
 <body style="margin:2%">
     <div style="float:left; border-style:double;">
-        <img src="{{url_for('static', filename = group[" id"]|string+".jpg")}}" height="350">
+        <img src="{{url_for('static', filename = group[" id"]|string+".jpg")}}" height="200">
     </div>
     <div style="float:left; margin:10px;">
         <h1 class="title">Welcome to {{group.name}}!</h1>
@@ -17,12 +17,12 @@
         {% for i in (user_playlists) %}
         <h2><b>Name: {{i.playlist}}</b></h2>
         <iframe style="border-radius:12px"
-            src="https://open.spotify.com/embed/playlist/{{i.url[34:]}}?utm_source=generator" width="300" height="80"
+            src="https://open.spotify.com/embed/playlist/{{i.url[34:]}}?utm_source=generator" width="200" height="80"
             frameBorder="0" allowfullscreen=""
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         {%endfor%}
         <div>
-            <h1 class="title">Group Chat</h1>
+            <h1 class="title">Comments</h1>
             <form method="POST" action="/post_comments/{{group_id}}">
                 <label for="comment">Leave a Comment: </label>
                 <textarea rows="5" cols="50" name="comment" placeholder="leave a comment"></textarea>

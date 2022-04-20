@@ -151,7 +151,7 @@ def del_playlist(group_id):
             playlists.append(j)
     group = Group.query.filter_by(group_id=str(group_id)).all()
     return flask.render_template(
-        "group.html",
+        "group1.html",
         group=group[0],
         user_playlists=user_playlists,
         comments=comments,
@@ -163,12 +163,6 @@ def del_playlist(group_id):
 def post_comment(group_id):
     """Post a comment"""
     user_playlists = Playlists.query.filter_by(username=user_id[0]).all()
-<<<<<<< HEAD
-    group_playlists = GroupInfo.query.filter_by(group_id=str(group_id)).all()
-    group = next((group for group in groups if group["id"] == group_id), None)
-    if group is None:
-        flask.abort(404, description="No Group was Found with the given ID")
-=======
     if flask.request.method == "POST":
         comment = flask.request.form["comment"]
         new_comment = GroupInfo(username=user_id[0], group_id=group_id, comments=comment)
@@ -183,14 +177,14 @@ def post_comment(group_id):
         if j.url:
             playlists.append(j)
     group = Group.query.filter_by(group_id=str(group_id)).all()
->>>>>>> 813ffab58f44e5aabd2424c960bb95420f67a354
     return flask.render_template(
-        "group.html",
+        "group1.html",
         group=group[0],
         user_playlists=user_playlists,
         comments=comments,
         playlist=playlists,
         group_id=group_id,
+        group_info=group_info
     )
 
 @bp.route("/group/<int:group_id>", methods=["GET", "POST"])
@@ -209,12 +203,6 @@ def group_details(group_id):
                 new_group_pl = GroupInfo(username=user_id[0], group_id=str(group_id), playlist=add_pl_name, url=add_pl_url)
                 db.session.add(new_group_pl)
                 db.session.commit()
-<<<<<<< HEAD
-    group_playlists = GroupInfo.query.filter_by(group_id=str(group_id)).all()
-    # group = next((group for group in groups if group["id"] == group_id), None)
-    # if group is None:
-    #     flask.abort(404, description="No Group was Found with the given ID")
-=======
     group_info = GroupInfo.query.filter_by(group_id=str(group_id)).all()
     comments = []
     playlists = []
@@ -223,10 +211,9 @@ def group_details(group_id):
             comments.append(j)
         if j.url:
             playlists.append(j)
->>>>>>> 813ffab58f44e5aabd2424c960bb95420f67a354
     group = Group.query.filter_by(group_id=str(group_id)).all()
     return flask.render_template(
-        "group.html",
+        "group1.html",
         group=group[0],
         user_playlists=user_playlists,
         comments=comments,
