@@ -21,7 +21,7 @@ import { Playlists } from './Info';
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.64:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'http://localhost:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -132,9 +132,9 @@ function App() {
         <button className="btn" onClick={handleGetUserProfile}>Get User Info</button>
         <button className="btn" onClick={handleGetUserPlaylists}>Get User Playlists</button>
         <a href={link}>Go To The HomePage!</a>
-        {name}
-        <div className="Profle">
-          <img src={image} alt="Profile Pic" width="250" height="300" />
+        <div className="Profile">
+          <img src={image} alt="Profile Pic" className="rounded" width="40px" height="42px" />
+          {name}
           {myPlaylists}
         </div>
       </body>

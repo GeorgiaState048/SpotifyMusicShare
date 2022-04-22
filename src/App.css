@@ -60,6 +60,14 @@ h1 {
   right: 16px;
 }
 
+.rounded{
+    border-radius: 50%;
+    padding: 1px;
+    border: 8px solid transparent;
+    border-color: #1DB954;
+}
+
+
   
 
 
