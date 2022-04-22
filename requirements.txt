@@ -8,3 +8,5 @@ flask_wtf
 wtforms
 wtforms.validators
 psycopg2
+react
+datetime

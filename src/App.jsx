@@ -15,13 +15,13 @@ import env from 'react-dotenv';
 import Logo from './images/logo.jpg';
 import { Playlists } from './Info';
 
-// import axios from 'axios'
+// import axios from 'axio
 // import UserProfile from './components/UserProfile';
 
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://localhost:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'https://whispering-sierra-18640.herokuapp.com/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -126,6 +126,11 @@ function App() {
         <h1>SPOTIFY MUSIC SHARE</h1>
         <div className="topleft">
           <img src={Logo} alt="Logo" width="140" height="125" />
+        </div>
+        <div>
+          <h1>
+            After you login, you must press the Get User Info and Get User Playlists buttons!
+          </h1>
         </div>
         <button className="btn" onClick={handleLogin}>log in to spotify</button>
         <button className="btn" onClick={handleLogin}>Switch Users</button>
