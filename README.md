@@ -12,7 +12,6 @@ yourself. You can create groups and share playlists and find wonderful new conne
 vibe by yourself, let's all share some music. This app utilizes the spotify api, which allows you
 to see all of your spotify data from a different location.
 
-
 # Installation
 To start, clone this project from this public github
     git clone git@github.com:GeorgiaState048/SpotifyMusicShare.git
@@ -46,7 +45,13 @@ To start, clone this project from this public github
     pylint: disable=unused-variable(conflicted with unit testing)
     pylint: disable=no-name-in-module(module was required to unit test)
     pylint: disable=import-error(false error on the module)
-  
+
+## User Access
+    We did not find out until later into the proejct that every user must be registered with the Spotify API project that we created in order to pull their data. The max amount of users that can be register for this project is 25. Also, the users must have premium accounts. If you would like for me to register you with this project, please send me an email with your spotify account email and the name associated with your account!
+
+    If you do not want to do this, feel free to use the provided login credentials:
+    Username: jonathanlaurent01
+    Password: Monitor!013
 
 # Creators
 - Jonathan Laurent

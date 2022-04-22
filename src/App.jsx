@@ -21,7 +21,7 @@ import { Playlists } from './Info';
 const SPOTIFY_KEY = env.CLIENT_ID; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const USER_ENDPOINT = 'https://api.spotify.com/v1/me';
-const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.64:8000/';
+const REDIRECT_URL_AFTER_LOGIN = 'http://192.168.1.82:8000/';
 const SPACE_DELIMITER = '%20';
 const SCOPES = [
   'user-read-currently-playing',
@@ -126,6 +126,11 @@ function App() {
         <h1>SPOTIFY MUSIC SHARE</h1>
         <div className="topleft">
           <img src={Logo} alt="Logo" width="140" height="125" />
+        </div>
+        <div>
+          <h1>
+            After you login, you must press the Get User Info and Get User Playlists buttons!
+          </h1>
         </div>
         <button className="btn" onClick={handleLogin}>log in to spotify</button>
         <button className="btn" onClick={handleLogin}>Switch Users</button>
