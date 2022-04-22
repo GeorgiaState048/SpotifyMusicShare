@@ -1,14 +1,38 @@
+body {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+
+
+
+
 /* Style the header with a grey background and some padding */
 .header {
   overflow: hidden;
-  background-color: #f1f1f1;
   padding: 20px 10px;
+  background: linear-gradient(#485563,  #29323c);
 }
 
 /* Style the header links */
 .header a {
   float: left;
-  color: black;
+  color: white;
   text-align: center;
   padding: 12px;
   text-decoration: none;
@@ -197,7 +221,6 @@ pre{display: inline-block;}
   float: left;
   width: 50%;
   padding: 0;
-  background-color: white;
   font-size: medium;
 }
 
@@ -206,5 +229,4 @@ pre{display: inline-block;}
   content: "";
   display: table;
   clear: both;
-  background-color: white;
 }
