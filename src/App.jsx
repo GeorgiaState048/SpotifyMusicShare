@@ -137,9 +137,9 @@ function App() {
         <button className="btn" onClick={handleGetUserProfile}>Get User Info</button>
         <button className="btn" onClick={handleGetUserPlaylists}>Get User Playlists</button>
         <a href={link}>Go To The HomePage!</a>
-        {name}
-        <div className="Profle">
-          <img src={image} alt="Profile Pic" width="250" height="300" />
+        <div className="Profile">
+          <img src={image} alt="Profile Pic" className="rounded" width="40px" height="42px" />
+          {name}
           {myPlaylists}
         </div>
       </body>
